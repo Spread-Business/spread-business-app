@@ -1,5 +1,4 @@
-// Apna deployed Google Apps Script Web App URL yahan paste karein
-const APPS_SCRIPT_URL = "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvNqqA34SUyCq0G3Pwz7q7TA6WXpdc6s7YwomArO-nZBJ6y7LOaQ11BHsyrfoCoz3j/exec";
 
 const state = {
   tab: "catalog",
@@ -10,7 +9,7 @@ const state = {
   messages: [],
   businessInfo: {
     Company_Name: "Spread Business Private Limited",
-    Address: "Sher Shah Colony, Raiwind Road, Lahore, Pakistan",
+    Address: "Thokar Niaz Baig, Raiwind Road, Lahore, Pakistan",
     Phone: "+92 322 410 9537",
     Email: "spreadbusines@gmail.com"
   },
@@ -20,7 +19,7 @@ const state = {
 };
 
 function isConfigured() {
-  return APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes("PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE");
+  return Boolean(APPS_SCRIPT_URL && APPS_SCRIPT_URL.startsWith("http"));
 }
 
 async function apiGet(action, params = {}) {
@@ -32,7 +31,7 @@ async function apiGet(action, params = {}) {
 
 async function apiPost(payload) {
   if (!isConfigured()) {
-    throw new Error("Pehle app.js mein APPS_SCRIPT_URL set karein.");
+    throw new Error("APPS_SCRIPT_URL missing.");
   }
   const res = await fetch(APPS_SCRIPT_URL, {
     method: "POST",
@@ -44,12 +43,6 @@ async function apiPost(payload) {
 
 async function loadInitialData() {
   updateRoleBadge();
-  if (!isConfigured()) {
-    state.statusNotice = "Demo mode active: Google Sheet se jorne ke liye APPS_SCRIPT_URL daalein.";
-    render();
-    return;
-  }
-
   try {
     const result = await apiGet("getAll");
     if (result && result.ok && result.data) {
@@ -63,6 +56,9 @@ async function loadInitialData() {
       }
       document.getElementById("headerCompanyName").textContent =
         state.businessInfo.Company_Name || "SPREAD BUSINESS";
+      state.statusNotice = "";
+    } else if (result && !result.ok) {
+      state.statusNotice = "Sheet error: " + (result.error || "Unknown");
     }
   } catch (err) {
     state.statusNotice = "Data load error: " + err.message;
@@ -381,9 +377,7 @@ function bindEvents() {
 
       try {
         await apiPost({ action: "registerUser", ...profile });
-      } catch (_) {
-        // Local session remains active even if offline
-      }
+      } catch (_) {}
       state.statusNotice = `Welcome ${profile.Full_Name} (${profile.Role})!`;
       render();
     });

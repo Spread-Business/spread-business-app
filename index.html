@@ -1,1 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spread Business Pvt Ltd</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Header -->
+    <header class="topbar">
+      <div class="brand-wrap">
+        <div class="logo-badge">SB</div>
+        <div>
+          <h1 id="headerCompanyName">SPREAD BUSINESS</h1>
+          <p id="headerSubtitle">Pvt Limited • Printing &amp; Branding</p>
+        </div>
+      </div>
+      <div class="role-pill" id="activeRoleBadge">Guest</div>
+    </header>
 
+    <!-- Main Content Area -->
+    <main id="appContent" class="content-area"></main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <button class="nav-btn active" data-tab="catalog" onclick="switchTab('catalog')">
+        <span>Catalog</span>
+      </button>
+      <button class="nav-btn" data-tab="order" onclick="switchTab('order')">
+        <span>Order</span>
+      </button>
+      <button class="nav-btn" data-tab="ordersList" onclick="switchTab('ordersList')">
+        <span>My Orders</span>
+      </button>
+      <button class="nav-btn" data-tab="chat" onclick="switchTab('chat')">
+        <span>Chat</span>
+      </button>
+      <button class="nav-btn" data-tab="account" onclick="switchTab('account')">
+        <span>Account</span>
+      </button>
+    </nav>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
